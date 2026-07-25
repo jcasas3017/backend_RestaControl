@@ -65,7 +65,12 @@ public class Usuario {
     }
 
     public String getName() {
-        return (nombres == null ? "" : nombres) + " " + (apellidos == null ? "" : apellidos).trim();
+        String nombreCompleto =
+                (nombres == null ? "" : nombres)
+                + " "
+                + (apellidos == null ? "" : apellidos);
+
+        return nombreCompleto.trim();
     }
 
     public String getRole() {

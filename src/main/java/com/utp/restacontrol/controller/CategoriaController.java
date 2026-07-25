@@ -7,7 +7,6 @@ import com.utp.restacontrol.service.CategoriaCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.utp.restacontrol.audit.Auditable;
 
 import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/categorias")
-@CrossOrigin(origins = "*")
 public class CategoriaController {
 
     private final CategoriaCrudService categoriaCrudService;
@@ -65,6 +64,11 @@ public class CategoriaController {
         }
     }
 
+    @Auditable(
+            modulo = "Categorías",
+            accion = "CREAR",
+            descripcion = "Registró una nueva categoría"
+    )
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody CategoriaCreateRequest request) {
         try {
@@ -80,6 +84,11 @@ public class CategoriaController {
         }
     }
 
+    @Auditable(
+            modulo = "Categorías",
+            accion = "ACTUALIZAR",
+            descripcion = "Actualizó una categoría"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable UUID id, @RequestBody CategoriaUpdateRequest request) {
         try {
@@ -98,6 +107,11 @@ public class CategoriaController {
         }
     }
 
+    @Auditable(
+            modulo = "Categorías",
+            accion = "CAMBIAR_ESTADO",
+            descripcion = "Cambió el estado de una categoría"
+    )
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable UUID id, @RequestBody CategoriaEstadoRequest request) {
         try {
@@ -115,6 +129,11 @@ public class CategoriaController {
         }
     }
 
+    @Auditable(
+            modulo = "Categorías",
+            accion = "ELIMINAR",
+            descripcion = "Inactivó una categoría"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable UUID id) {
         try {

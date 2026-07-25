@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.utp.restacontrol.dto.auth.CambiarPasswordRequest;
 
 import java.util.Set;
 import java.util.UUID;
@@ -154,5 +155,65 @@ public class UsuarioCrudService {
         dto.setFechaCreacion(user.getFechaCreacion());
         dto.setFechaActualizacion(user.getFechaActualizacion());
         return dto;
+    }
+
+    public void cambiarPasswordPropia(
+            String username,
+            CambiarPasswordRequest request
+    ) {
+        if (username == null || username.isBlank()) {
+            throw new IllegalArgumentException("No se pudo identificar al usuario autenticado");
+        }
+
+        if (request == null) {
+            throw new IllegalArgumentException("Body requerido");
+        }
+
+        String passwordActual = request.getPasswordActual();
+        String nuevaPassword = request.getNuevaPassword();
+
+        if (passwordActual == null || passwordActual.isBlank()) {
+            throw new IllegalArgumentException("La contraseña actual es obligatoria");
+        }
+
+        if (nuevaPassword == null || nuevaPassword.isBlank()) {
+            throw new IllegalArgumentException("La nueva contraseña es obligatoria");
+        }
+
+        if (nuevaPassword.length() < 6) {
+            throw new IllegalArgumentException(
+                    "La nueva contraseña debe tener al menos 6 caracteres"
+            );
+        }
+
+        Usuario user = usuarioRepository
+                .findByUsernameIgnoreCaseAndActivoTrue(username)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Usuario no encontrado")
+                );
+
+        if (!passwordEncoder.matches(
+                passwordActual,
+                user.getPassword()
+        )) {
+            throw new IllegalArgumentException(
+                    "La contraseña actual es incorrecta"
+            );
+        }
+
+        if (passwordEncoder.matches(
+                nuevaPassword,
+                user.getPassword()
+        )) {
+            throw new IllegalArgumentException(
+                    "La nueva contraseña debe ser diferente a la actual"
+            );
+        }
+
+        user.setPassword(
+                passwordEncoder.encode(nuevaPassword)
+        );
+
+        usuarioRepository.save(user);
     }
 }

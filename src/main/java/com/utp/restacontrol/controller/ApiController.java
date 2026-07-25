@@ -6,7 +6,7 @@ import com.utp.restacontrol.service.ListaMesasOperacionService;
 import com.utp.restacontrol.service.OperacionBusinessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+//import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +20,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(
-    origins = "http://localhost:5500",
-    allowCredentials = "true"
-)
+// @CrossOrigin(
+//     origins = "http://localhost:5500",
+//     allowCredentials = "true"
+// )
 public class ApiController {
 
     private final AtencionService atencionService;

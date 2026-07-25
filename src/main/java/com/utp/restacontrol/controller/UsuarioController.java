@@ -8,7 +8,6 @@ import com.utp.restacontrol.service.UsuarioCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -16,17 +15,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.utp.restacontrol.audit.Auditable;
+import org.springframework.security.core.Authentication;
 
 import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*")
 public class UsuarioController {
 
     private final UsuarioCrudService usuarioCrudService;
@@ -68,6 +67,11 @@ public class UsuarioController {
         }
     }
 
+    @Auditable(
+            modulo = "Usuarios",
+            accion = "CREAR",
+            descripcion = "Registró un nuevo usuario"
+    )
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody UsuarioCreateRequest request) {
         try {
@@ -83,6 +87,11 @@ public class UsuarioController {
         }
     }
 
+    @Auditable(
+            modulo = "Usuarios",
+            accion = "ACTUALIZAR",
+            descripcion = "Actualizó los datos de un usuario"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable UUID id, @RequestBody UsuarioUpdateRequest request) {
         try {
@@ -101,6 +110,11 @@ public class UsuarioController {
         }
     }
 
+    @Auditable(
+            modulo = "Usuarios",
+            accion = "CAMBIAR_ESTADO",
+            descripcion = "Cambió el estado activo de un usuario"
+    )
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable UUID id, @RequestBody UsuarioEstadoRequest request) {
         try {
@@ -118,6 +132,11 @@ public class UsuarioController {
         }
     }
 
+    @Auditable(
+            modulo = "Usuarios",
+            accion = "RESTABLECER_PASSWORD",
+            descripcion = "Restableció la contraseña de un usuario"
+    )
     @PatchMapping("/{id}/password")
     public ResponseEntity<?> resetPassword(@PathVariable UUID id, @RequestBody UsuarioPasswordRequest request) {
         try {
@@ -134,22 +153,36 @@ public class UsuarioController {
         }
     }
 
+    @Auditable(
+            modulo = "Usuarios",
+            accion = "ELIMINAR",
+            descripcion = "Inactivó un usuario"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(
             @PathVariable UUID id,
-            @RequestHeader(value = "X-Current-Username", required = false) String currentUsername
+            Authentication authentication
     ) {
         try {
+            String currentUsername = authentication != null
+                    ? authentication.getName()
+                    : null;
+
             usuarioCrudService.eliminarLogico(id, currentUsername);
+
             return ResponseEntity.ok(Map.of(
                     "success", true,
                     "message", "Usuario inactivado",
                     "data", Map.of("id", id)
             ));
+
         } catch (IllegalArgumentException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(error(ex.getMessage()));
+
         } catch (IllegalStateException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(error(ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(error(ex.getMessage()));
         }
     }
 

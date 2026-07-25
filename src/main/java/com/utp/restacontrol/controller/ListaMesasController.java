@@ -10,7 +10,6 @@ import com.utp.restacontrol.service.OperacionBusinessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.utp.restacontrol.audit.Auditable;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -28,7 +28,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
 public class ListaMesasController {
 
         private final ListaMesasOperacionService service;
@@ -61,6 +60,11 @@ public class ListaMesasController {
                                 "data", data));
         }
 
+        @Auditable(
+                modulo = "Atenciones",
+                accion = "OCUPAR_MESA",
+                descripcion = "Registró la ocupación de una mesa"
+        )
         @PostMapping("/lista-mesas/{idMesa}/ocupar")
         public ResponseEntity<?> ocupar(
                         @PathVariable UUID idMesa,
@@ -72,6 +76,11 @@ public class ListaMesasController {
                                 "data", data));
         }
 
+        @Auditable(
+                modulo = "Atenciones",
+                accion = "OCUPAR_DESDE_RESERVA",
+                descripcion = "Registró la ocupación de una mesa desde una reserva"
+        )
         @PostMapping("/lista-mesas/{idMesa}/reservas/{idReserva}/ocupar")
         public ResponseEntity<?> ocuparDesdeReserva(
                         @PathVariable UUID idMesa,
@@ -84,6 +93,11 @@ public class ListaMesasController {
                                 "data", data));
         }
 
+        @Auditable(
+                modulo = "Pedidos",
+                accion = "AGREGAR_ITEM",
+                descripcion = "Agregó un ítem al pedido"
+        )
         @PostMapping("/atenciones/{idAtencion}/items")
         public ResponseEntity<?> agregarItem(
                         @PathVariable UUID idAtencion,
@@ -105,6 +119,11 @@ public class ListaMesasController {
                                 "data", data));
         }
 
+        @Auditable(
+                modulo = "Pedidos",
+                accion = "CANCELAR_ITEM",
+                descripcion = "Canceló un ítem del pedido"
+        )
         @DeleteMapping("/detalle-pedidos/{idDetalle}")
         public ResponseEntity<?> cancelarDetalle(
                         @PathVariable UUID idDetalle) {
@@ -115,6 +134,11 @@ public class ListaMesasController {
                                 "data", data));
         }
 
+        @Auditable(
+                modulo = "Pedidos",
+                accion = "CAMBIAR_ESTADO_ITEM",
+                descripcion = "Cambió el estado de un ítem del pedido"
+        )
         @PatchMapping("/detalle-pedidos/{idDetalle}/estado")
         public ResponseEntity<?> cambiarEstadoItem(
                         @PathVariable UUID idDetalle,
@@ -126,6 +150,11 @@ public class ListaMesasController {
                                 "data", data));
         }
 
+        @Auditable(
+                modulo = "Cobros",
+                accion = "COBRAR_ATENCION",
+                descripcion = "Registró el cobro de una atención"
+        )
         @PostMapping("/atenciones/{idAtencion}/cobrar")
         public ResponseEntity<?> cobrar(
                         @PathVariable UUID idAtencion,
@@ -137,6 +166,11 @@ public class ListaMesasController {
                                 "data", data));
         }
 
+        @Auditable(
+                modulo = "Atenciones",
+                accion = "CAMBIAR_SITUACION",
+                descripcion = "Cambió la situación de una atención"
+        )
         @PatchMapping("/atenciones/{idAtencion}/situacion")
         public ResponseEntity<?> cambiarSituacionAtencion(
                         @PathVariable UUID idAtencion,
@@ -159,4 +193,5 @@ public class ListaMesasController {
                 }
                 return ResponseEntity.badRequest().body(body);
         }
+       
 }

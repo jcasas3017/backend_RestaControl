@@ -7,7 +7,6 @@ import com.utp.restacontrol.service.ProductoCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.utp.restacontrol.audit.Auditable;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = "*")
 public class ProductoController {
 
     private final ProductoCrudService productoCrudService;
@@ -80,6 +79,11 @@ public class ProductoController {
         }
     }
 
+    @Auditable(
+        modulo = "Productos",
+        accion = "CREAR",
+        descripcion = "Registró un nuevo producto"
+    )
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody ProductoCreateRequest request) {
         try {
@@ -95,6 +99,11 @@ public class ProductoController {
         }
     }
 
+    @Auditable(
+        modulo = "Productos",
+        accion = "ACTUALIZAR",
+        descripcion = "Actualizó un producto"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable UUID id, @RequestBody ProductoUpdateRequest request) {
         try {
@@ -113,6 +122,11 @@ public class ProductoController {
         }
     }
 
+    @Auditable(
+        modulo = "Productos",
+        accion = "CAMBIAR_ESTADO",
+        descripcion = "Cambió el estado de un producto"
+    )
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable UUID id, @RequestBody ProductoEstadoRequest request) {
         try {
@@ -129,6 +143,11 @@ public class ProductoController {
         }
     }
 
+    @Auditable(
+        modulo = "Productos",
+        accion = "ELIMINAR",
+        descripcion = "Inactivó un producto"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable UUID id) {
         try {

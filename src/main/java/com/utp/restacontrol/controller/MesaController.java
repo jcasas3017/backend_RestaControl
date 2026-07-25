@@ -9,7 +9,6 @@ import com.utp.restacontrol.service.MesaCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.utp.restacontrol.audit.Auditable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +28,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/mesas")
-@CrossOrigin(origins = "*")
 public class MesaController {
 
     private final MesaCrudService mesaCrudService;
@@ -92,6 +91,12 @@ public class MesaController {
         }
     }
 
+    @Auditable(
+            modulo = "Mesas",
+            accion = "CREAR",
+            descripcion = "Registró una nueva mesa"
+    )
+
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody MesaCreateRequest request) {
         try {
@@ -107,6 +112,11 @@ public class MesaController {
         }
     }
 
+    @Auditable(
+            modulo = "Mesas",
+            accion = "ACTUALIZAR",
+            descripcion = "Actualizó una mesa"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable UUID id, @RequestBody MesaUpdateRequest request) {
         try {
@@ -125,6 +135,11 @@ public class MesaController {
         }
     }
 
+    @Auditable(
+            modulo = "Mesas",
+            accion = "CAMBIAR_ESTADO",
+            descripcion = "Cambió el estado de una mesa"
+    )
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable UUID id, @RequestBody MesaEstadoRequest request) {
         try {
@@ -141,6 +156,11 @@ public class MesaController {
         }
     }
 
+    @Auditable(
+            modulo = "Mesas",
+            accion = "CAMBIAR_SITUACION",
+            descripcion = "Cambió la situación de una mesa"
+    )
     @PatchMapping("/{id}/situacion")
     public ResponseEntity<?> cambiarSituacion(@PathVariable UUID id, @RequestBody MesaSituacionRequest request) {
         try {
@@ -160,6 +180,11 @@ public class MesaController {
         }
     }
 
+    @Auditable(
+            modulo = "Mesas",
+            accion = "ELIMINAR",
+            descripcion = "Inactivó una mesa"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable UUID id) {
         try {

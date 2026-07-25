@@ -7,7 +7,6 @@ import com.utp.restacontrol.service.ClienteCrudService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.utp.restacontrol.audit.Auditable;
 
 import java.util.Map;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/clientes")
-@CrossOrigin(origins = "*")
 public class ClienteController {
 
     private final ClienteCrudService clienteCrudService;
@@ -81,6 +80,11 @@ public class ClienteController {
         }
     }
 
+    @Auditable(
+            modulo = "Clientes",
+            accion = "CREAR",
+            descripcion = "Registró un nuevo cliente"
+    )
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody ClienteCreateRequest request) {
         try {
@@ -96,6 +100,11 @@ public class ClienteController {
         }
     }
 
+    @Auditable(
+            modulo = "Clientes",
+            accion = "ACTUALIZAR",
+            descripcion = "Actualizó un cliente"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable UUID id, @RequestBody ClienteUpdateRequest request) {
         try {
@@ -114,6 +123,11 @@ public class ClienteController {
         }
     }
 
+    @Auditable(
+            modulo = "Clientes",
+            accion = "CAMBIAR_ESTADO",
+            descripcion = "Cambió el estado de un cliente"
+    )
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable UUID id, @RequestBody ClienteEstadoRequest request) {
         try {
@@ -130,6 +144,11 @@ public class ClienteController {
         }
     }
 
+    @Auditable(
+            modulo = "Clientes",
+            accion = "ELIMINAR",
+            descripcion = "Inactivó un cliente"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable UUID id) {
         try {

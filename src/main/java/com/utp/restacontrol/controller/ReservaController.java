@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.utp.restacontrol.audit.Auditable;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -31,7 +31,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/reservas")
-@CrossOrigin(origins = "*")
 public class ReservaController {
 
     private final ReservaCrudService reservaCrudService;
@@ -74,6 +73,11 @@ public class ReservaController {
         ));
     }
 
+    @Auditable(
+            modulo = "Reservas",
+            accion = "EXPORTAR",
+            descripcion = "Exportó el reporte de reservas a Excel"
+    )
     @GetMapping(value = "/exportar-excel", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     public ResponseEntity<byte[]> exportarExcel(
             @RequestParam(required = false) String search,
@@ -103,6 +107,11 @@ public class ReservaController {
         }
     }
 
+    @Auditable(
+            modulo = "Reservas",
+            accion = "CREAR",
+            descripcion = "Registró una nueva reserva"
+    )
     @PostMapping
     public ResponseEntity<?> crear(@RequestBody ReservaCreateRequest request) {
         try {
@@ -118,6 +127,11 @@ public class ReservaController {
         }
     }
 
+    @Auditable(
+            modulo = "Reservas",
+            accion = "ACTUALIZAR",
+            descripcion = "Actualizó una reserva"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable UUID id, @RequestBody ReservaUpdateRequest request) {
         try {
@@ -136,6 +150,11 @@ public class ReservaController {
         }
     }
 
+    @Auditable(
+            modulo = "Reservas",
+            accion = "CAMBIAR_CONFIRMACION",
+            descripcion = "Cambió la confirmación de una reserva"
+    )
     @PatchMapping("/{id}/estado")
     public ResponseEntity<?> cambiarEstado(@PathVariable UUID id, @RequestBody ReservaEstadoRequest request) {
         try {
@@ -152,6 +171,11 @@ public class ReservaController {
         }
     }
 
+    @Auditable(
+            modulo = "Reservas",
+            accion = "CAMBIAR_SITUACION",
+            descripcion = "Cambió la situación de una reserva"
+    )
     @PatchMapping("/{id}/situacion")
     public ResponseEntity<?> cambiarSituacion(@PathVariable UUID id, @RequestBody ReservaSituacionRequest request) {
         try {
@@ -168,6 +192,11 @@ public class ReservaController {
         }
     }
 
+    @Auditable(
+            modulo = "Reservas",
+            accion = "ELIMINAR",
+            descripcion = "Inactivó una reserva"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminar(@PathVariable UUID id) {
         try {
