@@ -8,6 +8,7 @@ public class ClienteCreateRequest {
     private String telefono;
     private String email;
     private Boolean activo;
+    private Boolean activoPrueba;
 
     public String getNombres() { return nombres; }
     public void setNombres(String nombres) { this.nombres = nombres; }
