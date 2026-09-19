@@ -16,15 +16,11 @@ Este repositorio contiene los servicios backend del sistema RestaControl.
 
 ## INTEGRANTES
 
-1. &#x20;
-2. &#x20;
-3. &#x20;
-4. 
-5. 
-
-
-
-
+1. Casas Montenegro, Javier
+2. Cuaresma Huaman, Eder Jesús
+3. Pareja Matías, Juan Carlos
+4. Flores Perez, Paul Alexis,
+5. Osorio Chacon,Diego Jairo
 
 
 
