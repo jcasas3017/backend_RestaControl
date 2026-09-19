@@ -8,6 +8,9 @@ public class ClienteCreateRequest {
     private String telefono;
     private String email;
     private Boolean activo;
+    private String direccion; 
+    private String direccionfinal;
+
 
     public String getNombres() { return nombres; }
     public void setNombres(String nombres) { this.nombres = nombres; }
