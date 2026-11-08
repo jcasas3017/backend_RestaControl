@@ -1,0 +1,33 @@
+name: CD - RestaControl Academico
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generar-artefacto:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+
+      - name: Compilar proyecto sin ejecutar pruebas
+        run: mvn -B -DskipTests package
+
+      - name: Guardar artefacto JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: restacontrol-backend-academico
+          path: target/*.jar
+          if-no-files-found: error
+          retention-days: 7
