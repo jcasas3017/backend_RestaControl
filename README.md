@@ -1,13 +1,9 @@
-# RestaControl - Backend
+Participación de Diego Jairo Osorio Chacon
 
-Backend del sistema RestaControl.
+Rol: Responsable de Despliegue y Nube.
 
-## Tecnologías
-
-- Java
-- Spring Boot
-- PostgreSQL
-
-## Descripción
-
-Este repositorio contiene los servicios backend del sistema RestaControl.
+Actividades:
+- Configuración del Dockerfile.
+- Preparación del despliegue del backend.
+- Configuración de servicios en Render.
+- Documentación del proceso de despliegue.
