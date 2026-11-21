@@ -1,4 +1,3 @@
-Participación de Diego Jairo Osorio Chacon
 
 Rol: Responsable de Despliegue y Nube.
 
