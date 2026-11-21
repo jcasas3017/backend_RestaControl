@@ -62,6 +62,7 @@ public class SecurityConfig {
                  */
                 .requestMatchers(
                     "/api/auth/login",
+                    "/actuator/health",
                     "/error"
                 ).permitAll()
 
@@ -220,8 +221,9 @@ public class SecurityConfig {
         CorsConfiguration configuration =
                 new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of(
-            "http://localhost:5500"
+        configuration.setAllowedOriginPatterns(List.of(
+            "http://localhost:*",
+            "https://juancmduel.github.io"
         ));
 
         configuration.setAllowedMethods(List.of(
